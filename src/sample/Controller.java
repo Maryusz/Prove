@@ -97,7 +97,7 @@ public class Controller implements Initializable{
                         for (int i = 0; i < timesToRun; i++ ){
                             pw.setColor(random.nextInt(600), random.nextInt(600),
                                     Color.color(random.nextDouble(), random.nextDouble(),random.nextDouble()));
-                            
+
                             updateProgress(i, timesToRun);
                         }
                     }
