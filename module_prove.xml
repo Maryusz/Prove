@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="module_prove" default="compile.module.prove">
+    <dirname property="module.prove.basedir" file="${ant.file.module_prove}"/>
+
+    <property name="module.jdk.home.prove" value="${project.jdk.home}"/>
+    <property name="module.jdk.bin.prove" value="${project.jdk.bin}"/>
+    <property name="module.jdk.classpath.prove" value="${project.jdk.classpath}"/>
+
+    <property name="compiler.args.prove" value="-encoding UTF-8 -source 1.8 -target 1.8 ${compiler.args}"/>
+
+    <property name="prove.output.dir" value="${module.prove.basedir}/out/production/Prove"/>
+    <property name="prove.testoutput.dir" value="${module.prove.basedir}/out/test/Prove"/>
+
+    <path id="prove.module.bootclasspath">
+        <!-- Paths to be included in compilation bootclasspath -->
+    </path>
+
+    <path id="prove.module.production.classpath">
+        <path refid="${module.jdk.classpath.prove}"/>
+        <path refid="library.dist.classpath"/>
+    </path>
+
+    <path id="prove.runtime.production.module.classpath">
+        <pathelement location="${prove.output.dir}"/>
+        <path refid="library.dist.classpath"/>
+    </path>
+
+    <path id="prove.module.classpath">
+        <path refid="${module.jdk.classpath.prove}"/>
+        <pathelement location="${prove.output.dir}"/>
+        <path refid="library.dist.classpath"/>
+        <pathelement location="${idea.home}/plugins/junit/lib/junit-jupiter-api-5.0.0.jar"/>
+        <pathelement location="${idea.home}/plugins/junit/lib/opentest4j-1.0.0.jar"/>
+    </path>
+
+    <path id="prove.runtime.module.classpath">
+        <pathelement location="${prove.testoutput.dir}"/>
+        <pathelement location="${prove.output.dir}"/>
+        <path refid="library.dist.classpath"/>
+        <pathelement location="${idea.home}/plugins/junit/lib/junit-jupiter-api-5.0.0.jar"/>
+        <pathelement location="${idea.home}/plugins/junit/lib/opentest4j-1.0.0.jar"/>
+    </path>
+
+
+    <patternset id="excluded.from.module.prove">
+        <patternset refid="ignored.files"/>
+    </patternset>
+
+    <patternset id="excluded.from.compilation.prove">
+        <patternset refid="excluded.from.module.prove"/>
+    </patternset>
+
+    <path id="prove.module.sourcepath">
+        <dirset dir="${module.prove.basedir}">
+            <include name="src"/>
+        </dirset>
+    </path>
+
+
+    <target name="compile.module.prove" depends="compile.module.prove.production,compile.module.prove.tests"
+            description="Compile module Prove"/>
+
+    <target name="compile.module.prove.production" depends="register.custom.compilers"
+            description="Compile module Prove; production classes">
+        <mkdir dir="${prove.output.dir}"/>
+        <javac2 destdir="${prove.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}"
+                memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.prove}/javac">
+            <compilerarg line="${compiler.args.prove}"/>
+            <bootclasspath refid="prove.module.bootclasspath"/>
+            <classpath refid="prove.module.production.classpath"/>
+            <src refid="prove.module.sourcepath"/>
+            <patternset refid="excluded.from.compilation.prove"/>
+        </javac2>
+
+        <copy todir="${prove.output.dir}">
+            <fileset dir="${module.prove.basedir}/src">
+                <patternset refid="compiler.resources"/>
+                <type type="file"/>
+            </fileset>
+        </copy>
+    </target>
+
+    <target name="compile.module.prove.tests" depends="register.custom.compilers,compile.module.prove.production"
+            description="compile module Prove; test classes" unless="skip.tests"/>
+
+    <target name="clean.module.prove" description="cleanup module">
+        <delete dir="${prove.output.dir}"/>
+        <delete dir="${prove.testoutput.dir}"/>
+    </target>
+</project>

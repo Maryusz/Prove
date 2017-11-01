@@ -1,0 +1,9 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="Random Map Generator.jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/Random_Map_Generator_jar</output-path>
+    <root id="archive" name="Prove.jar">
+      <element id="module-output" name="Prove" />
+      <element id="extracted-dir" path="$USER_HOME$/AppData/Local/SceneBuilder/app/dist.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>
