@@ -197,6 +197,7 @@ public class Controller implements Initializable{
 
                                 while (point2DList.contains(np)){
                                     np = newPoint(np);
+
                                     count++;
                                     // If theres no other way it breakes the loop.
                                     if (count > 14) {
@@ -207,6 +208,7 @@ public class Controller implements Initializable{
                             point2DList.add(np);
 
                             updateProgress(i, iterazioni);
+                            antialiasPoint(np, colorPicker.getValue());
                             pw.setColor((int)np.getX(), (int) np.getY(), colorPicker.getValue() );
                         }
                     }
@@ -222,6 +224,45 @@ public class Controller implements Initializable{
 
         pb.progressProperty().bind(t.progressProperty());
         lb.setText(String.format("%d pixel scritti", point2DList.size()));
+    }
+
+    /**
+     * This method draw a more transparent pixels around the passed Point 0.4 of the passed color.
+     * It's a primitive try to antialias the line.
+     *
+     * @param point2D
+     * @param color
+     */
+    private void antialiasPoint(Point2D point2D, Color color) {
+
+        // Create the opacized color from the passed color.
+        Color opacizedColor = Color.color(color.getRed(), color.getGreen(), color.getBlue(), 0.4);
+
+        //Gets the original x and y positions from the passed point
+        int xPosition = (int) point2D.getX();
+        int yPosition = (int) point2D.getY();
+
+        // Create the new points where to draw opacized pixels
+        Point2D lessXPoint2D = new Point2D(xPosition - 1, yPosition);
+        Point2D moreXPoint2D = new Point2D(xPosition + 1, yPosition);
+        Point2D lessYPoint2D = new Point2D(xPosition, yPosition - 1);
+        Point2D moreYPoint2D = new Point2D(xPosition, yPosition + 1);
+
+
+        // If there no already a point there it draw the new point with opacized color.
+        if (!point2DList.contains(lessXPoint2D)) {
+            pw.setColor((int) lessXPoint2D.getX(), (int) lessXPoint2D.getY(), opacizedColor);
+        }
+        if (!point2DList.contains(moreXPoint2D)) {
+            pw.setColor((int) moreXPoint2D.getX(), (int) moreXPoint2D.getY(), opacizedColor);
+        }
+        if (!point2DList.contains(lessYPoint2D)) {
+            pw.setColor((int) lessYPoint2D.getX(), (int) lessYPoint2D.getY(), opacizedColor);
+        }
+        if (!point2DList.contains(moreYPoint2D)) {
+            pw.setColor((int) moreYPoint2D.getX(), (int) moreYPoint2D.getY(), opacizedColor);
+        }
+        
     }
 
 
