@@ -112,7 +112,7 @@ public class Controller implements Initializable{
      */
     private void setEndingPoint(double x, double y) {
         endPoint = new Point2D(x, y);
-        pw.setColor((int) endPoint.getX(), (int) endPoint.getY(), Color.BLACK );
+        pw.setColor((int) endPoint.getX(), (int) endPoint.getY(), colorPicker.getValue());
 
     }
 
@@ -123,7 +123,7 @@ public class Controller implements Initializable{
      */
     private void setStartingPoint(double x, double y) {
         startPoint = new Point2D(x, y);
-        pw.setColor((int) startPoint.getX(), (int) startPoint.getY(), Color.BLACK );
+        pw.setColor((int) startPoint.getX(), (int) startPoint.getY(), colorPicker.getValue());
         point2DList.add(startPoint);
 
     }
@@ -200,7 +200,7 @@ public class Controller implements Initializable{
 
                                     count++;
                                     // If theres no other way it breakes the loop.
-                                    if (count > 14) {
+                                    if (count > 5) {
                                         break;
                                     }
                                 }
@@ -262,9 +262,16 @@ public class Controller implements Initializable{
         if (!point2DList.contains(moreYPoint2D)) {
             pw.setColor((int) moreYPoint2D.getX(), (int) moreYPoint2D.getY(), opacizedColor);
         }
-        
+
     }
 
 
+    public void reset(ActionEvent actionEvent) {
+        gp.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
+        point2DList.clear();
+        gp.setFill(Color.valueOf("#FFFFFF"));
+        gp.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
+        gp.stroke();
+    }
 }
 

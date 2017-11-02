@@ -30,5 +30,6 @@
       <TextField fx:id="lineComplexity" layoutX="355.0" layoutY="555.0" prefHeight="26.0" prefWidth="40.0" text="1"/>
       <Label layoutX="129.0" layoutY="520.0" text="Iterazioni"/>
       <Label layoutX="322.0" layoutY="520.0" text="Complessita linea"/>
+      <Button layoutX="563.0" layoutY="552.0" mnemonicParsing="false" onAction="#reset" text="Reset"/>
    </children>
 </AnchorPane>
