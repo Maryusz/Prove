@@ -14,6 +14,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Label;
+import javafx.scene.control.Slider;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
@@ -46,6 +47,9 @@ public class Controller implements Initializable{
     @FXML
     private CheckBox checkSovrapposizione;
 
+    @FXML
+    private Slider opacitySlider;
+
 
     private Point2D startPoint, endPoint;
     private EventHandler<MouseEvent> mouseEventEventHandler;
@@ -59,6 +63,8 @@ public class Controller implements Initializable{
 
         point2DList = new HashSet<>();
         random = new Random();
+        opacitySlider.setMin(0.0);
+        opacitySlider.setMax(1.0);
 
         gp = canvas.getGraphicsContext2D();
 
@@ -80,16 +86,9 @@ public class Controller implements Initializable{
                     setEndingPoint(event.getX(), event.getY());
 
                     //Draw the line n times specified in the text field
-
                     for (int i = 0; i < Integer.parseInt(lineComplexity.getText()); i++) {
                         drawRandomLine();
                     }
-
-                }else if (MouseEvent.MOUSE_DRAGGED == event.getEventType()){
-                    drawLine(event.getX(), event.getY());
-                }
-                else {
-                   // System.out.println(event.getEventType());
                 }
             }
         };
@@ -98,10 +97,6 @@ public class Controller implements Initializable{
         canvas.setOnMouseReleased(mouseEventEventHandler);
 
 
-    }
-
-    private void drawLine(double x, double y) {
-        pw.setColor((int) x, (int) y, colorPicker.getValue());
     }
 
     /**
@@ -158,7 +153,7 @@ public class Controller implements Initializable{
 
     @FXML
     void updatePb(ActionEvent event) {
-        //TODO: Must generate a shape for automatic construction
+        //TODO: This method must define some random figure for random generation of the map without drawing it
     }
 
 
@@ -167,10 +162,15 @@ public class Controller implements Initializable{
      * @param point2D
      * @return
      */
-    private double checkDistance(Point2D point2D) {
+    private double checkDistanceFromEnd(Point2D point2D) {
         return point2D.distance(endPoint);
-
     }
+
+    private boolean checkLineIntersection(){
+        //TODO: this method must check for line intersection
+        return false;
+    }
+
 
     private void drawRandomLine() {
         int iterazioni = Integer.parseInt(fieldIterazioni.getText());
@@ -186,7 +186,7 @@ public class Controller implements Initializable{
 
                         for (int i = 0; i < iterazioni; i++){
                             np = newPoint(np);
-                            if (checkDistance(np) < 2.0) {
+                            if (checkDistanceFromEnd(np) < 2.0) {
                                 break;
                             }
 
@@ -236,7 +236,7 @@ public class Controller implements Initializable{
     private void antialiasPoint(Point2D point2D, Color color) {
 
         // Create the opacized color from the passed color.
-        Color opacizedColor = Color.color(color.getRed(), color.getGreen(), color.getBlue(), 0.4);
+        Color opacizedColor = Color.color(color.getRed(), color.getGreen(), color.getBlue(), opacitySlider.getValue());
 
         //Gets the original x and y positions from the passed point
         int xPosition = (int) point2D.getX();
